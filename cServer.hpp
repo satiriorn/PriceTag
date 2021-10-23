@@ -5,14 +5,14 @@
 #include <WiFiClient.h>
 #include <WiFiClientSecureBearSSL.h>
 
-
 class cServer{
   public:
-    explicit cServer();
     void ConnectWifi();
     void Update();
+    String Split(String data, char separator, int index);
   private:
     HTTPClient https;
     ESP8266WiFiMulti WiFiMulti;
+    
     //auto client;
 };

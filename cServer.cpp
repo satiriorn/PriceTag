@@ -1,9 +1,14 @@
 #include "cServer.hpp"
 #include "badge.hpp"
+#include "StringSplitter.h"
 
-cServer::cServer(){
-
-}
+struct Data{
+    String Description;
+    String Title;
+    uint32_t Price;
+    uint32_t PromotionalPrice;
+    bool Sale;
+}data;
 
 void cServer::ConnectWifi(){
   WiFi.mode(WIFI_STA);
@@ -30,12 +35,33 @@ void cServer::Update(){
         Serial.printf("[HTTPS] GET... code: %d\n", httpCode);
         if (httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY) {// file found at server
           String payload = https.getString();
+          payload.replace("<tr> <td>","");
+          payload.replace("</td> </tr>", "");
+          StringSplitter *splitter = new StringSplitter(payload, ';', 5);
+          data.Description = splitter->getItemAtIndex(0);
+          data.Title = splitter->getItemAtIndex(1);
+          data.Price = splitter->getItemAtIndex(2).toInt();
+          data.PromotionalPrice = splitter->getItemAtIndex(3).toInt();
+          data.Sale = bool(splitter->getItemAtIndex(4));
+
+          //sscanf(char_payload, "%s;%s;%d;%d;%d", &data.Description, &data.Title, &a, &data.PromotionalPrice, &data.Sale);
           Serial.println(payload);
-          } 
+          Serial.println(data.Description);
+          Serial.println(data.Title);
+          Serial.println(data.Price);
+          Serial.println(data.PromotionalPrice);
+          Serial.println(data.Sale);
+          //data
+          }   
         }
         else 
           Serial.printf("[HTTPS] GET... failed, error: %s\n", https.errorToString(httpCode).c_str());
       } 
       https.end();
   }
+}
+
+String cServer::Split(String data, char separator, int index)
+{
+
 }
