@@ -43,15 +43,13 @@ void cServer::Update(){
           data.Price = splitter->getItemAtIndex(2).toInt();
           data.PromotionalPrice = splitter->getItemAtIndex(3).toInt();
           data.Sale = bool(splitter->getItemAtIndex(4));
-
-          //sscanf(char_payload, "%s;%s;%d;%d;%d", &data.Description, &data.Title, &a, &data.PromotionalPrice, &data.Sale);
           Serial.println(payload);
           Serial.println(data.Description);
           Serial.println(data.Title);
           Serial.println(data.Price);
           Serial.println(data.PromotionalPrice);
           Serial.println(data.Sale);
-          //data
+
           }   
         }
         else 
@@ -59,9 +57,4 @@ void cServer::Update(){
       } 
       https.end();
   }
-}
-
-String cServer::Split(String data, char separator, int index)
-{
-
 }
