@@ -30,18 +30,23 @@ void cServer::Update(){
           String payload = https.getString();
           payload.replace("<tr> <td>","");
           payload.replace("</td> </tr>", "");
-          StringSplitter *splitter = new StringSplitter(payload, '#', 5);
-          Serial.println(splitter->getItemAtIndex(0));
-          data.Description = splitter->getItemAtIndex(0);
-          data.Title = splitter->getItemAtIndex(1);
-          data.Price = splitter->getItemAtIndex(2).toInt();
-          data.PromotionalPrice = splitter->getItemAtIndex(3).toInt();
+          StringSplitter *splitter = new StringSplitter(payload, '#', 6);
+          data.Title = splitter->getItemAtIndex(0);
+          data.Description = splitter->getItemAtIndex(1);
+          data.Price = splitter->getItemAtIndex(2).toFloat();
+          data.PromotionalPrice = splitter->getItemAtIndex(3).toFloat();
           data.Sale = bool(splitter->getItemAtIndex(4));
-          Serial.println(payload);
+          data.QRlink = splitter->getItemAtIndex(5);
+          Serial.println(data.Description);
+          Serial.println(data.Title);
+          Serial.println(data.Price);
+          Serial.println(data.PromotionalPrice);
+          Serial.println(data.Sale);
+          Serial.println(data.QRlink);
           }   
         }
         else 
-          Serial.printf("[HTTPS] GET... failed, error: %s\n", https.errorToString(httpCode).c_str());
+          Serial.printf("[HTTPS] POST... failed, error: %s\n", https.errorToString(httpCode).c_str());
       } 
       https.end();
   }

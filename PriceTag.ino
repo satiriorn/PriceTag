@@ -10,7 +10,6 @@ void setup() {
   server = new cServer();
   server->ConnectWifi();
   Data* data = server->Get_Data();
-  Serial.println(data->Title); 
   delay(1000);
   dspl = new cDisplay();
   dspl->DrawText(data);

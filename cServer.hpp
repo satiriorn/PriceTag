@@ -8,9 +8,10 @@
 struct Data{
       String Description;
       String Title;
-      uint32_t Price;
-      uint32_t PromotionalPrice;
+      float Price;
+      float PromotionalPrice;
       bool Sale;
+      String QRlink;
 };
   
 class cServer{

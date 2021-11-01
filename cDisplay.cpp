@@ -32,7 +32,7 @@ void cDisplay::DrawText(Data* data){
     u8g2Fonts.setCursor(107, 60);
     u8g2Fonts.setFont(SMALL_FONT);
     u8g2Fonts.print("грн/шт");
-    DrawQRcode();
+    DrawQRcode(data);
     /*
     u8g2Fonts.setFont(MIDL_FONT);
     u8g2Fonts.print("Білий без ГМО");
@@ -44,12 +44,12 @@ void cDisplay::DrawText(Data* data){
   while (display.nextPage());
 }
 
-void cDisplay::DrawQRcode(){
-  uint8_t qrcodeData[qrcode_getBufferSize(4)];
-  qrcode_initText(&qrcode, qrcodeData, 4, 0, "https://github.com/satiriorn/PriceTag");
+void cDisplay::DrawQRcode(Data* data){
+  uint8_t qrcodeData[qrcode_getBufferSize(5)];
+  qrcode_initText(&qrcode, qrcodeData, 5, 0, data->QRlink.c_str());
   int offset_x = 5;
-  int offset_y = 70;
-  int p_width  = 1.15;
+  int offset_y = 65;
+  int p_width  = 1.25;
   for (int y = 0; y < qrcode.size; y++) {
     for (int x = 0; x < qrcode.size; x++) {
       int new_x = offset_x + (x * p_width);

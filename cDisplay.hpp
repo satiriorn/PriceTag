@@ -10,7 +10,7 @@
 class cDisplay{
   public:
     cDisplay();
-    void DrawQRcode();
+    void DrawQRcode(Data* data);
     void DrawText(Data* data);
     
   private:
