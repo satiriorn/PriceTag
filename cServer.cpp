@@ -2,13 +2,6 @@
 #include "badge.hpp"
 #include "StringSplitter.h"
 
-struct Data{
-    String Description;
-    String Title;
-    uint32_t Price;
-    uint32_t PromotionalPrice;
-    bool Sale;
-}data;
 
 void cServer::ConnectWifi(){
   WiFi.mode(WIFI_STA);
@@ -37,19 +30,14 @@ void cServer::Update(){
           String payload = https.getString();
           payload.replace("<tr> <td>","");
           payload.replace("</td> </tr>", "");
-          StringSplitter *splitter = new StringSplitter(payload, ';', 5);
+          StringSplitter *splitter = new StringSplitter(payload, '#', 5);
+          Serial.println(splitter->getItemAtIndex(0));
           data.Description = splitter->getItemAtIndex(0);
           data.Title = splitter->getItemAtIndex(1);
           data.Price = splitter->getItemAtIndex(2).toInt();
           data.PromotionalPrice = splitter->getItemAtIndex(3).toInt();
           data.Sale = bool(splitter->getItemAtIndex(4));
           Serial.println(payload);
-          Serial.println(data.Description);
-          Serial.println(data.Title);
-          Serial.println(data.Price);
-          Serial.println(data.PromotionalPrice);
-          Serial.println(data.Sale);
-
           }   
         }
         else 
