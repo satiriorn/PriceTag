@@ -11,17 +11,16 @@ void cServer::ConnectWifi(){
     delay(1000);
     Serial.print(++i); Serial.print(' ');
   }
-  Update();
 }
 
-void cServer::Update(){
+void cServer::Update(int* id){
   if(WiFiMulti.run()== WL_CONNECTED){
     std::unique_ptr<BearSSL::WiFiClientSecure>client(new BearSSL::WiFiClientSecure);
     client->setInsecure();
     Serial.print("[HTTPS] begin...\n");
     if (https.begin(*client, serverName)) {  // HTTPS
       https.addHeader("Content-Type", "application/x-www-form-urlencoded");
-      String httpRequestData = "api_key=" + apiKeyValue + "&id="+1;
+      String httpRequestData = "api_key=" + apiKeyValue + "&id="+String(*id);
       int httpCode = https.POST(httpRequestData);// start connection and send HTTP header
       // httpCode will be negative on error
       if (httpCode > 0) {// HTTP header has been send and Server response header has been handled
@@ -30,19 +29,17 @@ void cServer::Update(){
           String payload = https.getString();
           payload.replace("<tr> <td>","");
           payload.replace("</td> </tr>", "");
-          StringSplitter *splitter = new StringSplitter(payload, '#', 6);
+          StringSplitter *splitter = new StringSplitter(payload, '#', 5);
           data.Title = splitter->getItemAtIndex(0);
           data.Description = splitter->getItemAtIndex(1);
           data.Price = splitter->getItemAtIndex(2).toFloat();
           data.PromotionalPrice = splitter->getItemAtIndex(3).toFloat();
           data.Sale = bool(splitter->getItemAtIndex(4));
-          data.QRlink = splitter->getItemAtIndex(5);
           Serial.println(data.Description);
           Serial.println(data.Title);
           Serial.println(data.Price);
           Serial.println(data.PromotionalPrice);
           Serial.println(data.Sale);
-          Serial.println(data.QRlink);
           }   
         }
         else 

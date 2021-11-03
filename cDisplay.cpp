@@ -14,7 +14,7 @@ cDisplay::cDisplay(){
   u8g2Fonts.begin(display);
 }
 
-void cDisplay::DrawText(Data* data){
+void cDisplay::DrawText(Data* data, int* id){
   display.setRotation(1);
   u8g2Fonts.setFont(LARGE_FONT);
   if (display.epd2.WIDTH < 104) display.setFont(0); 
@@ -32,7 +32,7 @@ void cDisplay::DrawText(Data* data){
     u8g2Fonts.setCursor(107, 60);
     u8g2Fonts.setFont(SMALL_FONT);
     u8g2Fonts.print("грн/шт");
-    DrawQRcode(data);
+    DrawQRcode(id);
     /*
     u8g2Fonts.setFont(MIDL_FONT);
     u8g2Fonts.print("Білий без ГМО");
@@ -44,9 +44,12 @@ void cDisplay::DrawText(Data* data){
   while (display.nextPage());
 }
 
-void cDisplay::DrawQRcode(Data* data){
+void cDisplay::DrawQRcode(int* id){
   uint8_t qrcodeData[qrcode_getBufferSize(5)];
-  qrcode_initText(&qrcode, qrcodeData, 5, 0, data->QRlink.c_str());
+  Serial.println(*id); 
+  String c = String("https://price-tag-database.herokuapp.com/")+ String(*id);
+  Serial.println(c); 
+  qrcode_initText(&qrcode, qrcodeData, 5, 0, c.c_str());
   int offset_x = 5;
   int offset_y = 65;
   int p_width  = 1.25;

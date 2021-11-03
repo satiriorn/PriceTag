@@ -10,8 +10,8 @@
 class cDisplay{
   public:
     cDisplay();
-    void DrawQRcode(Data* data);
-    void DrawText(Data* data);
+    void DrawQRcode(int* id);
+    void DrawText(Data* data, int* id);
     
   private:
     U8G2_FOR_ADAFRUIT_GFX u8g2Fonts;

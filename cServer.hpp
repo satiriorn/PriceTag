@@ -11,13 +11,12 @@ struct Data{
       float Price;
       float PromotionalPrice;
       bool Sale;
-      String QRlink;
 };
   
 class cServer{
   public:
     void ConnectWifi();
-    void Update();
+    void Update(int* id);
     Data* Get_Data(){return &data;}
   private:
     HTTPClient https;
