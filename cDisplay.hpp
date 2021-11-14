@@ -6,14 +6,14 @@
 #include "cServer.hpp"
 #include <qrcode.h>
 
-
 class cDisplay{
   public:
     cDisplay();
-    void DrawQRcode(int* id);
-    void DrawText(Data* data, int* id);
-    
+    void DrawQRcode(int id);
+    void DrawText(Data* data, int id);
+    int Percent(float x, float y);
   private:
     U8G2_FOR_ADAFRUIT_GFX u8g2Fonts;
     QRCode qrcode;
+    int pos;
 };
