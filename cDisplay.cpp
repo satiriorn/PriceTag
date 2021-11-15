@@ -29,9 +29,8 @@ void cDisplay::DrawText(Data* data, int id){
     u8g2Fonts.setFont(MIDL_FONT);
     u8g2Fonts.setForegroundColor(GxEPD_YELLOW);
     u8g2Fonts.setCursor(0, 45);  
-    
-    pos = u8g2Fonts.getUTF8Width(String(data->Price).c_str()) + 2;
-    u8g2Fonts.print(String(data->Price));
+    pos = u8g2Fonts.getUTF8Width(ReplaceFloat(String(data->Price)).c_str()) + 2;
+    u8g2Fonts.print(ReplaceFloat(String(data->Price)));
     for(int x = 0; x<pos;x++){
         display.fillRect( x, 40, 1, 1, GxEPD_BLACK);
         display.fillRect( x, 40, 2, 2, GxEPD_BLACK);
@@ -40,8 +39,8 @@ void cDisplay::DrawText(Data* data, int id){
     u8g2Fonts.print("-"+String(Percent(data->SalePrice, data->Price))+"%");
     u8g2Fonts.setFont(LARGE_FONT);
     u8g2Fonts.setCursor(pos, 60);
-    u8g2Fonts.print(String(data->SalePrice));
-    int i = u8g2Fonts.getUTF8Width(String(data->SalePrice).c_str()) + 2 + pos;
+    u8g2Fonts.print(ReplaceFloat(String(data->SalePrice)));
+    int i = u8g2Fonts.getUTF8Width(ReplaceFloat(String(data->SalePrice)).c_str()) + 2 + pos;
     u8g2Fonts.setCursor(i, 60);
   }
   else{
@@ -88,6 +87,12 @@ int cDisplay::Percent(float x, float y){
     float result = 0;
     result = ((y - x) * 100) / y;
     return result;
+  }
+  
+String cDisplay::ReplaceFloat(String s){
+    s.replace(".00", "");
+    Serial.println(s);
+    return s;
   }
   
 void cDisplay::DrawQRcode(int id){

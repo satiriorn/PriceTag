@@ -11,8 +11,9 @@ class cDisplay{
     cDisplay();
     void DrawQRcode(int id);
     void DrawText(Data* data, int id);
-    int Percent(float x, float y);
   private:
+    int Percent(float x, float y);
+    String ReplaceFloat(String s);
     U8G2_FOR_ADAFRUIT_GFX u8g2Fonts;
     QRCode qrcode;
     int pos;
