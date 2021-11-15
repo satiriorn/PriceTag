@@ -12,24 +12,37 @@ GxEPD2_3C<GxEPD2_213c, GxEPD2_213c::HEIGHT> display(GxEPD2_213c(/*CS=15*/ SS, /*
 cDisplay::cDisplay(){
   display.init(115200);  
   u8g2Fonts.begin(display);
+  display.setRotation(-1);
 }
 
 void cDisplay::DrawText(Data* data, int id){
-  display.setRotation(-1);
   u8g2Fonts.setFont(LARGE_FONT);
   u8g2Fonts.setForegroundColor(GxEPD_BLACK);
   u8g2Fonts.setBackgroundColor(GxEPD_WHITE);
   display.setFullWindow();
   display.firstPage();
   display.fillScreen(GxEPD_WHITE);
-  u8g2Fonts.setCursor(0, 30);
-  u8g2Fonts.print(data->Title);
+  DrawTitle(data);
+  if(data->Sale)
+    DrawSaleMode(data);
+  else
+    DrawWithoutSaleMode(data);
+  DrawMeasurement(data);
+  DrawDescription(data);
   DrawQRcode(id);
-  if(data->Sale){
+  display.nextPage();
+}
+
+void cDisplay::DrawTitle(Data* data){
+    u8g2Fonts.setCursor(0, 30);
+    u8g2Fonts.print(data->Title);
+  }
+
+void cDisplay::DrawSaleMode(Data* data){
     u8g2Fonts.setFont(MIDL_FONT);
     u8g2Fonts.setForegroundColor(GxEPD_YELLOW);
     u8g2Fonts.setCursor(0, 45);  
-    pos = u8g2Fonts.getUTF8Width(ReplaceFloat(String(data->Price)).c_str()) + 2;
+    int pos = u8g2Fonts.getUTF8Width(ReplaceFloat(String(data->Price)).c_str()) + 2;
     u8g2Fonts.print(ReplaceFloat(String(data->Price)));
     for(int x = 0; x<pos;x++){
         display.fillRect( x, 40, 1, 1, GxEPD_BLACK);
@@ -43,18 +56,24 @@ void cDisplay::DrawText(Data* data, int id){
     int i = u8g2Fonts.getUTF8Width(ReplaceFloat(String(data->SalePrice)).c_str()) + 2 + pos;
     u8g2Fonts.setCursor(i, 60);
   }
-  else{
+  
+void cDisplay::DrawWithoutSaleMode(Data* data){
     u8g2Fonts.setCursor(0, 60);
     u8g2Fonts.setForegroundColor(GxEPD_YELLOW); 
-    pos = u8g2Fonts.getUTF8Width(String(data->Price).c_str()) + 2;
+    int pos = u8g2Fonts.getUTF8Width(String(data->Price).c_str()) + 2;
     u8g2Fonts.print(String(data->Price));
     u8g2Fonts.setCursor(pos, 60);
-    }
-  u8g2Fonts.setForegroundColor(GxEPD_BLACK);
-  u8g2Fonts.setFont(MIDL_FONT);
-  u8g2Fonts.print(data->Measurement);
+  } 
+  
+void cDisplay::DrawMeasurement(Data* data){
+    u8g2Fonts.setForegroundColor(GxEPD_BLACK);
+    u8g2Fonts.setFont(MIDL_FONT);
+    u8g2Fonts.print(data->Measurement);
+  }
+  
+void cDisplay::DrawDescription(Data* data){
   u8g2Fonts.setCursor(50, 75);
-  pos = u8g2Fonts.getUTF8Width(data->Description.c_str());
+  int pos = u8g2Fonts.getUTF8Width(data->Description.c_str());
   Serial.println(pos);
   int space_for_text = display.width()-50;
   Serial.println(space_for_text);
@@ -80,9 +99,10 @@ void cDisplay::DrawText(Data* data, int id){
       else
           u8g2Fonts.print(second_part);
     }
-  display.nextPage();
-}
-
+    else
+      u8g2Fonts.print(data->Description);
+  }
+  
 int cDisplay::Percent(float x, float y){
     float result = 0;
     result = ((y - x) * 100) / y;
@@ -91,7 +111,6 @@ int cDisplay::Percent(float x, float y){
   
 String cDisplay::ReplaceFloat(String s){
     s.replace(".00", "");
-    Serial.println(s);
     return s;
   }
   
