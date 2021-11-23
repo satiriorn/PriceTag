@@ -75,9 +75,7 @@ void cDisplay::DrawMeasurement(Data* data){
 void cDisplay::DrawDescription(Data* data){
   u8g2Fonts.setCursor(50, 75);
   int pos = u8g2Fonts.getUTF8Width(data->Description.c_str());
-  Serial.println(pos);
   int space_for_text = display.width()-50;
-  Serial.println(space_for_text);
   if(pos>space_for_text){
       int count_symbol = 42;//(space_for_text/7.5f)*2;
       Serial.println(count_symbol);

@@ -11,6 +11,7 @@ struct Data{
       float SalePrice;
       bool Sale;
       String Measurement;
+      String Time;
 };
   
 class cServer{

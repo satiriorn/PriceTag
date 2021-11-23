@@ -4,7 +4,9 @@
 cDisplay dspl;
 cServer server;
 Data* data;
+
 const int id = 1;
+int hour = 0;
 
 void setup() {
   Serial.begin(115200);
@@ -17,9 +19,8 @@ void loop() {
   server.Update(id);
   data = server.Get_Data();
   dspl.DrawText(data, id);
-  delay(100);
+  hour = data->Time.toInt()+2;
+  Serial.println(hour);
   Serial.println("DEEP SLEEEP");
-  ESP.deepSleep(3600000000UL); 
-  //delay(1000000);
-
+  (hour>21)?ESP.deepSleep(432e10):ESP.deepSleep(3600000000UL); 
 }

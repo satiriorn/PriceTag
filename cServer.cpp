@@ -28,18 +28,14 @@ void cServer::Update(int id){
           String payload = https.getString();
           payload.replace("<tr> <td>","");
           payload.replace("</td> </tr>", "");
-          StringSplitter *splitter = new StringSplitter(payload, '#', 6);
+          StringSplitter *splitter = new StringSplitter(payload, '#', 7);
           data.Description = splitter->getItemAtIndex(0);
           data.Title = splitter->getItemAtIndex(1);
           data.Price = splitter->getItemAtIndex(2).toFloat();
           data.SalePrice = splitter->getItemAtIndex(3).toFloat();
           data.Sale = splitter->getItemAtIndex(4).toInt();
           data.Measurement = splitter->getItemAtIndex(5);
-          Serial.println(data.Description);
-          Serial.println(data.Title);
-          Serial.println(data.Price);
-          Serial.println(data.SalePrice);
-          Serial.println(data.Sale);
+          data.Time = splitter->getItemAtIndex(6);
           }   
         }
         else{
