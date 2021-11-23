@@ -34,7 +34,8 @@ void cDisplay::DrawText(Data* data, int id){
 }
 
 void cDisplay::DrawTitle(Data* data){
-    u8g2Fonts.setCursor(0, 30);
+    int pos = u8g2Fonts.getUTF8Width(String(data->Title).c_str());
+    u8g2Fonts.setCursor((display.width() - pos)/ 2, 30);
     u8g2Fonts.print(data->Title);
   }
 
@@ -78,7 +79,7 @@ void cDisplay::DrawDescription(Data* data){
   int space_for_text = display.width()-50;
   Serial.println(space_for_text);
   if(pos>space_for_text){
-      int count_symbol = 43;//(space_for_text/7.5f)*2;
+      int count_symbol = 42;//(space_for_text/7.5f)*2;
       Serial.println(count_symbol);
       Serial.println(data->Description);
       String first_part = data->Description.substring(0, count_symbol);
